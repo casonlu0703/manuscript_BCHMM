@@ -145,8 +145,11 @@ sp3 <- cbind(id, sp3)
 
 saveRDS(list(sp1, sp2, sp3), "results/BCHMM_state_probabilities.rds")
 
-# calculate circadian parameters
-source("../simulation/code/function_calculate_circadian_parameters.R")
+## Calculate circadian parameters -------------------------------------------
+## [updated on 11/1/2024]
+## New version, differentiate start hour of a day for all subjects ----------
+
+source("function_calculate_RARparams_improvedCRC.R")
 
 circadian_params <- lapply(results, function(x){
   circadian.param(one.day.prob = x[[2]])
@@ -164,9 +167,48 @@ CRC <- unlist(lapply(circadian_params, function(x){
   x$CRC
 }))
 
-dat.circadian <- data.frame(SEQN = id, state_param, RI = RI, RA = RA, CRC = CRC)
-saveRDS(dat.circadian, "results/sample_circadian_params.rds")
+RI_active <- unlist(lapply(circadian_params, function(x){
+  x$RI_active
+}))
 
+AA <- unlist(lapply(circadian_params, function(x){
+  x$AA
+}))
+
+CAC <- unlist(lapply(circadian_params, function(x){
+  x$CAC
+}))
+
+MIPP <- unlist(lapply(circadian_params, function(x){
+  x$MIPP
+}))
+
+MAPP <- unlist(lapply(circadian_params, function(x){
+  x$MAPP
+}))
+
+S1StartHr <- unlist(lapply(circadian_params, function(x){
+  x$S1StartHr
+}))
+
+S3StartHr <- unlist(lapply(circadian_params, function(x){
+  x$S3StartHr
+}))
+
+# dat.circadian <- data.frame(SEQN = id, state_param, RI = RI, RA = RA, CRC = CRC)
+# saveRDS(dat.circadian, "data/nhanes_matched_sample_circadian_params.rds")
+
+# add RAR parameters for HA (state 3) and MIPP, MAPP
+dat.circadian <- data.frame(
+  SEQN = id, state_param
+  , RI = RI, RA = RA, CRC = CRC
+  , RI_active = RI_active, AA = AA, CAC = CAC
+  , MIPP = MIPP, MAPP = MAPP
+  , S1StartHr = S1StartHr
+  , S3StartHr = S3StartHr
+)
+
+saveRDS(dat.circadian, "data/nhanes_matched_sample_circadian_params3.rds")
 
 # plot rest-activity profile
 source("function_figure_day_profile.R")
