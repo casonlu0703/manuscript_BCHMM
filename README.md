@@ -26,6 +26,8 @@ All example data are stored in the data folder.
 
 function_stan_for_bchmm.STAN: STAN file containing codes to fit BCHMM.
 
+function_calculate_RARparams_improvedCRC.R: R function to calculate RAR parameters and identify CRC by personalized starting hour of a 24-hour day.
+
 function_calculate_circadian_parameters.R: R function to calculate RAR parameters.
 
 function_figure_day_profile.R: Plot 24-hour rest-activity profiles using time-varying transition probabilities fitted by BCHMM.
